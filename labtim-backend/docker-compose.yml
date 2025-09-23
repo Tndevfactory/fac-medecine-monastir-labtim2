@@ -1,0 +1,61 @@
+# docker-compose.yml
+services:
+  # Service for MySQL Database
+  mysql_db:
+    image: mysql:8.0
+    container_name: labtim_mysql_db
+    environment:
+      # --- IMPORTANT CHANGE: Temporarily hardcoding the password ---
+      # MySQL entrypoint sometimes struggles with reading ${DB_PASSWORD} from .env
+      # during initial setup, leading to an empty root password.
+      # Replace 'your_hardcoded_mysql_password' with a simple password (e.g., 'mypass123')
+      # This password MUST match what DB_PASSWORD is in your .env file
+      MYSQL_ROOT_PASSWORD: test123
+      # --- END IMPORTANT CHANGE ---
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 3s
+
+  # Service for Node.js Backend Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: labtim_backend_app
+    ports:
+      - "5000:5000"
+    environment: # These environment variables are correctly read by the Node.js app
+      PORT: ${PORT}
+      DB_HOST: mysql_db
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD} # This must now match the hardcoded password above
+      DB_NAME: ${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    command: >
+      /bin/sh -c "
+        echo 'Waiting for MySQL to be ready...' &&
+        while ! nc -z mysql_db 3306; do
+          sleep 1;
+        done;
+        echo 'MySQL is ready. Starting app...';
+        npm run dev;
+      "
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: always
+
+# Define named volumes for persistent data
+volumes:
+  mysql_data:
