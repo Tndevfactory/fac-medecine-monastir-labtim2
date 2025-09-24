@@ -24,7 +24,7 @@ services:
       - "5000:5000"
     environment:
       - NODE_ENV=development
-      - MYSQL_HOST=db
+      - MYSQL_HOST=mysql
       - MYSQL_USER=root
       - MYSQL_PASSWORD=secret
       - MYSQL_DATABASE=mydb
@@ -53,6 +53,19 @@ services:
       timeout: 5s
       retries: 10
       start_period: 30s
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: secret
+    ports:
+      - "8080:80" # phpMyAdmin available on http://localhost:8080
+    depends_on:
+      - db
 
   nginx:
     image: nginx:alpine
