@@ -3,6 +3,11 @@
 import { CarouselItem } from "@/types/index";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+console.log("API_BASE_URL:", API_BASE_URL); // Debug log to verify the base URL
+
+if (!API_BASE_URL) {
+  throw new Error("NEXT_PUBLIC_BACKEND_API_URL is not defined");
+}
 
 /**
  * Utility function for making authenticated requests.
@@ -20,6 +25,7 @@ const fetchWithAuth = async (
   };
 
   const response = await fetch(url, { ...options, headers });
+  console.log(`Response from ${url}:`, response); // Debug log to verify the response
 
   if (!response.ok) {
     let errorData: any = {};
@@ -50,6 +56,8 @@ export const getAllCarouselItems = async (
 }> => {
   try {
     const response = await fetchWithAuth(`${API_BASE_URL}/carousel`, token);
+
+    console.log("Fetched carousel items:", response); // Debug log to verify fetched data
     return response;
   } catch (error: any) {
     console.error("Error fetching all carousel items:", error);
