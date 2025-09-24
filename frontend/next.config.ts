@@ -28,7 +28,7 @@ const nextConfig = {
         pathname: "/uploads/**", // Explicitly limit to uploads
       },
       {
-        protocol: "http",
+        protocol: "https",
         hostname: "lab-tim.org",
       },
       {
