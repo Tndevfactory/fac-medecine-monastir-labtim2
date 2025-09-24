@@ -39,12 +39,12 @@ const nextConfig = {
         protocol: "http",
         hostname: "102.211.209.201",
       },
-      {
-        protocol: "http",
-        hostname: "172.29.112.1", // Backend IP
-        port: "5000",
-        pathname: "/uploads/**", // Explicitly limit to uploads
-      },
+      // {
+      //   protocol: "http",
+      //   hostname: "172.29.112.1", // Backend IP
+      //   port: "5000",
+      //   pathname: "/uploads/**", // Explicitly limit to uploads
+      // },
     ],
   },
 
