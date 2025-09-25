@@ -1,10 +1,7 @@
-// next.config.js
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
 
-  // This section defines allowed external image domains for the Next.js Image component.
   images: {
     remotePatterns: [
       {
@@ -16,56 +13,30 @@ const nextConfig = {
         hostname: "placehold.co",
       },
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "5000",
-        pathname: "/uploads/**", // Explicitly limit to uploads
-      },
-      {
-        protocol: "http",
-        hostname: "localhost",
-        port: "5000",
-        pathname: "/uploads/**", // Explicitly limit to uploads
-      },
-      {
+        // Your public domain (served by Nginx, proxying to backend:5000/uploads)
         protocol: "https",
         hostname: "lab-tim.org",
+        pathname: "/uploads/**",
       },
       {
         protocol: "http",
         hostname: "lab-tim.org",
+        pathname: "/uploads/**",
       },
-      {
-        protocol: "http",
-        hostname: "102.211.209.201",
-      },
-      // {
-      //   protocol: "http",
-      //   hostname: "172.29.112.1", // Backend IP
-      //   port: "5000",
-      //   pathname: "/uploads/**", // Explicitly limit to uploads
-      // },
     ],
   },
 
-  // This section defines URL rewrites/proxies.
   async rewrites() {
     return [
+      // Proxy /uploads → backend
       {
         source: "/uploads/:path*",
-        destination: "http://localhost:5000/uploads/:path*",
+        destination: "http://backend:5000/uploads/:path*", // backend is your docker service name
       },
-      {
-        source: "/uploads/:path*",
-        destination: "http://172.29.112.1:5000/uploads/:path*",
-      },
+      // Proxy /api → backend
       {
         source: "/api/:path*",
-        destination: "http://localhost:5000/api/:path*",
-      },
-      {
-        source: "/api/:path*",
-        destination: "http://172.29.112.1:5000/uploads/:path*",
+        destination: "http://backend:5000/api/:path*",
       },
     ];
   },
