@@ -16,7 +16,9 @@ import ErrorModal from "@/components/ui/ErrorModal";
 const inter = Inter({ subsets: ["latin"] });
 
 //const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL?.replace('/api', '') || 'http://localhost:5000';
-const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_UPLOADS;
+const BACKEND_BASE_URL =
+  process.env.NEXT_PUBLIC_BACKEND_UPLOADS + "actu_images/" ||
+  "http://backend:5000/uploads/actu_images/";
 
 const ActualitesList = () => {
   const searchParams = useSearchParams();
