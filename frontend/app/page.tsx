@@ -13,7 +13,9 @@ const API_BASE_URL: any = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 console.log("API_BASE_URL:", API_BASE_URL); // Debug log to verify the base URL
 
 const fetchCarouselData = async () => {
-  const response = await fetch(`${API_BASE_URL}/carousel`);
+  // server side fetch must have backend container url http://backend:5000/api/carousel
+  // const response = await fetch(`${API_BASE_URL}/carousel`);
+  const response = await fetch(`http://backend:5000/api/carousel`);
   return await response.json();
 };
 
