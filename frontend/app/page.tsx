@@ -15,7 +15,8 @@ console.log("API_BASE_URL:", API_BASE_URL); // Debug log to verify the base URL
 const fetchCarouselData = async () => {
   // server side fetch must have backend container url http://backend:5000/api/carousel
   // const response = await fetch(`${API_BASE_URL}/carousel`);
-  const response = await fetch(`${API_BASE_URL}/carousel`);
+  // const response = await fetch(`${API_BASE_URL}/carousel`);
+  const response = await fetch(`http://lab-tim.org/api/carousel`);
   return await response.json();
 };
 
